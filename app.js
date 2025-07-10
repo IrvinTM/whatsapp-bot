@@ -3,7 +3,8 @@ const { createBot, createProvider, createFlow, addKeyword } = require('@bot-what
 const QRPortalWeb = require('@bot-whatsapp/portal')
 const BaileysProvider = require('@bot-whatsapp/provider/baileys')
 const PostgreSQLAdapter = require('@bot-whatsapp/database/postgres')
-
+const dotenv = require('dotenv')
+require('dotenv').config()
 /**
  * Declaramos las conexiones de PostgreSQL
  */
@@ -14,6 +15,7 @@ const POSTGRES_DB_PASSWORD = process.env.POSTGRES_DB_PASSWORD
 const POSTGRES_DB_NAME = process.env.POSTGRES_DB_NAME
 const POSTGRES_DB_PORT = process.env.POSTGRES_DB_PORT
 
+console.log("database creds " + `${POSTGRES_DB_HOST}`)
 /**
  * Aqui declaramos los flujos hijos, los flujos se declaran de atras para adelante, es decir que si tienes un flujo de este tipo:
  *
@@ -91,6 +93,10 @@ const main = async () => {
         database: POSTGRES_DB_NAME,
         password: POSTGRES_DB_PASSWORD,
         port: POSTGRES_DB_PORT,
+        ssl: {
+            rejectUnauthorized: false
+        }
+
     })
     const adapterFlow = createFlow([flowPrincipal])
     const adapterProvider = createProvider(BaileysProvider)
